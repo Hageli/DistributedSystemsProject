@@ -2,7 +2,7 @@ ALL REQUIRED SCRIPTS FOR THIS WEBSITE ARE IN ./project-master/package.json
 
 ### QUICK START GUIDE ###
 
-1. NPM and Node required to run this website. No setup guide included here because Miro is lazy. This should be quite easy find online
+1. NPM and Node required to run this website. No setup guide included here because Miro is lazy. This should be quite easy to find online
 2. Navigate to project-master folder in terminal
 
 ### RUN THE FOLLOWING IN TERMINAL ###
