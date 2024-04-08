@@ -2,12 +2,14 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
+import { useNavigate } from 'react-router-dom'
 
 // THIS IS THE MAINPAGE. CONTAINS THE TINDER CARDS AND CHAT/MATCH LISTING
 function Mainpage() {
     const [ user, setUser ] = useState('');
     const [ cookies, setCookie, removeCookie ] = useCookies(['user']);
-    
+    let navigate = useNavigate();
+
     // GETS THE CURRENT LOGGED IN USER
     const getUser = async () => {
       try {
@@ -21,14 +23,24 @@ function Mainpage() {
       } 
     }
 
+    const Logout = () => {
+      removeCookie('UserEmail');
+      removeCookie('UserID');
+      removeCookie('AuthToken');
+      navigate('/home')
+    }
+
     useEffect(() => {
       getUser();
     }, [])
 
   return (
-    <div className="mainpage">
-      <h1>This is mainpage</h1>
+    <>
+    <h1>Hi {user.name}! This is mainpage</h1>
+    <div className="LogoutDiv">
+      <button className="btn-large" onClick={Logout}>Logout</button>
     </div>
+  </>
   )
 }
 
