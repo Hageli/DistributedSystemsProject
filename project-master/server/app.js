@@ -5,6 +5,7 @@ var logger = require('morgan');
 const mongoose = require("mongoose");
 var cors = require("cors");
 const User = require("./models/User");
+const Image = require("./models/Image");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
 require("dotenv").config();

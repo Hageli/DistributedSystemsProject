@@ -13,20 +13,7 @@ body {
     margin-right: 15px;
 }
 
-.btn {
-    color: #fff;
-    background-color: #26a69a;
-}
 
-.btn-small {
-    color: #fff;
-    background-color: #26a69a;
-}
-
-.btn-large {
-    color: #fff;
-    background-color:#26a69a;
-}
 
 .buttonDiv {
     margin: 2%;
@@ -45,8 +32,38 @@ body {
 
 .edit-div,
 .login-div,
-.create-div {
+.create-div,
+.ai-div {
     background-color: #e3e6e5;
+    padding: 10px;
+    border-radius: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.img-div {
+    justify-content: center;
     padding: 10px;
 }
 
+.img-container {
+    width: 40%;
+    height: 40vh;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.footer-div {
+    margin-top: 10px;
+}
+
+.footer-div a {
+    margin-left: 5px;
+    margin-right: 5px;
+}

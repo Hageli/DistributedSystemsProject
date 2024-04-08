@@ -21,7 +21,7 @@ function Home() {
     return (
     <div className="home">
         {!showNewAccount && !showLogin && (
-            <h1>Welcome to NotTinder</h1>
+            <h1>Welcome to PhotoFinder</h1>
         )}
 
         <div className="buttonDiv">
