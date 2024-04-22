@@ -68,26 +68,6 @@ function AddNewAccount({ setShowNewAccount }) {
                 </div>
                 <div className="create-input">
                     <input 
-                        type="text" 
-                        id="age" 
-                        name="age" 
-                        placeholder="age" 
-                        required={true} 
-                        onChange={(e) => setAge(e.target.value)}
-                    />
-                </div>
-                <div className="create-input">
-                    <input 
-                        type="text" 
-                        id="description" 
-                        name="description" 
-                        placeholder="description" 
-                        required={true} 
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                </div>
-                <div className="create-input">
-                    <input 
                         type="password" 
                         id="password" 
                         name="password" 

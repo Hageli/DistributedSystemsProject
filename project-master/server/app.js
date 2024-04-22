@@ -33,7 +33,7 @@ app.get('/user', async (req, res) => {
 })
 
 app.post('/createaccount', async (req, res) => {
-    const { email, name, age, description, password } = req.body;
+    const { email, name, password } = req.body;
     const lowerEmail = email.toLowerCase();
     const tempAccount = await User.findOne({email: lowerEmail});
     // FAILED IF EMAIL IS ALREADY IN USE
@@ -43,8 +43,6 @@ app.post('/createaccount', async (req, res) => {
             const newUser = new User({
                 email: lowerEmail,
                 name: name,
-                age: age,
-                description: description,
                 password: hashedPassword
             });
             await newUser.save();
