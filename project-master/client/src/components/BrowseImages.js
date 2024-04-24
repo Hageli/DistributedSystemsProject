@@ -4,14 +4,29 @@ import axios from 'axios'
 import { useCookies } from 'react-cookie'
 
 function BrowseImages() {
-    const [ allImages, setAllImages ] = useState(null);
+    const [ images, setImages ] = useState(null);
+    const [ dogimages, setDogimages ] = useState(null);
     const [ cookies ] = useCookies(['user']);
 
     // get all images from server
+    const getDogImages = async () => {
+        try {
+            axios.get('/dogimages', {params: {UserEmail: cookies.UserEmail}})
+            .then(response => {
+                setDogimages(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching images:', error);
+            });
+        } catch (error) {
+            console.error('Error fetching images:', error);
+        }
+    }
+
     const getImages = async () => {
         try {
             const response = await axios.get('/images', {params: {UserEmail: cookies.UserEmail}});
-            setAllImages(response.data);
+            setImages(response.data);
         } catch (error) {
             console.log(error);
         }
@@ -23,6 +38,7 @@ function BrowseImages() {
 
     useEffect(() => {
         getImages();
+        getDogImages();
     }, [])
 
     return (
@@ -32,10 +48,20 @@ function BrowseImages() {
             <button className="btn-large" onClick={backToMain}>Back to mainpage</button>
         </div>
         <div className="img-div">
-            {allImages == null ? "" : allImages.map((image) => {
+            {images == null ? "" : images.map((image, index) => {
                 return (
-                <div key={image.image} className="browse-img">
-                    <img  src={require(`../images/${image.image}`)} style={{width: '70%'}} />
+                <div key={index} className="gallery-item">
+                    <img src={require(`../images/${image.image}`)} alt={`Dog ${index}`} />
+                </div>
+                )
+            })}    
+        </div>
+        <h1>DogAPI Images</h1>
+        <div className="img-div">
+            {dogimages == null ? "" : dogimages.map((image, index) => {
+                return (
+                <div key={index} className="gallery-item">
+                    <img src={image.url} alt={`Dog ${index}`} />
                 </div>
                 )
             })}    

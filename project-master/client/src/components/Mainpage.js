@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 function Mainpage() {
     const [ user, setUser ] = useState('');
-    const [image, setImage] = useState('https://picsum.photos/id/237/200/300')
+    const [ image, setImage] = useState('https://picsum.photos/id/237/200/300')
     const [ cookies, setCookie, removeCookie ] = useCookies(['user']);
     let navigate = useNavigate();
 
@@ -52,6 +52,30 @@ function Mainpage() {
       }
     }
 
+    const generateDogImage = async () => {
+      try {
+        const fetchResponse = await axios.get('https://dog.ceo/api/breeds/image/random');
+        if (fetchResponse.data.status === 'success') {
+            setImage(fetchResponse.data.message);
+
+            //SEND DOG IMAGE FOR SAVING
+            const saveResponse = await axios.post('http://localhost:5000/saveDogImage', {
+                url: fetchResponse.data.message,
+                sender: cookies.UserEmail
+            });
+            if (saveResponse.status === 201) {
+                console.log('Image saved successfully');
+            } else {
+                console.error('Failed to save image');
+            }
+        } else {
+            console.error('Failed to fetch dog image');
+        }
+      } catch (error) {
+          console.error('Error fetching or saving:', error);
+      }
+    };
+
     useEffect(() => {
       getUser();
     }, [])
@@ -72,13 +96,14 @@ function Mainpage() {
         <button type="submit" className="btn-small">Create Image</button>
     </div>
     <div className="filesend-div">
-        <p>Enter a file you want to upload</p>
-        <div className="file-container">
-          <form>
-            <input type="file" id="file_upload" name="file_upload" className="file_upload" accept="image/*"/>
-          </form>
-        </div>
-        <button type="submit" className="btn-small" onClick={uploadImage}>Upload Image</button>
+      <p>Enter a file you want to upload</p>
+      <div className="file-container">
+        <form>
+          <input type="file" id="file_upload" name="file_upload" className="file_upload" accept="image/*"/>
+        </form>
+      </div>
+      <button type="submit" className="btn-small" onClick={uploadImage} style={{margin: '2px'}}>Upload Image</button>
+      <button onClick={generateDogImage} className="btn-small" style={{margin: '2px'}}>Generate Dog</button>
     </div>
     <div className="footer-div">
       <a href="/home" onClick={Logout}>Logout</a>

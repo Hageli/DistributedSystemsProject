@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 var cors = require("cors");
 const User = require("./models/User");
 const Image = require("./models/Image");
+const DogImage = require("./models/DogImage");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
 require("dotenv").config();
@@ -99,11 +100,10 @@ app.post('/login', async (req, res) => {
 
 // This is used to upload images to database
 app.post('/upload', upload.single('image'), (req, res) => {
-    const imageName = req.file.filename;
     try {
         const newImage = new Image({
             sender: req.body.user,
-            image: imageName
+            image: file
         })
         newImage.save();
     } catch {
@@ -117,5 +117,34 @@ app.get('/images', async (req, res) => {
     const images = await Image.find({sender: req.query.UserEmail});
     res.send(images);
 })
+
+app.post('/saveDogImage', async (req, res) => {
+    try { 
+
+        const { url, sender } = req.body;
+
+        const newImage = new DogImage({
+            sender: sender,
+            url: url
+        });
+        await newImage.save();
+        res.status(201).send('Dog image saved successfully');
+
+    } catch (error) {
+        console.error('Error fetching or saving dog image:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+//MIIKA: GET ALL IMAGES FROM DATABASE
+app.get('/dogimages', async (req, res) => {
+    try {
+        const images = await DogImage.find({sender: req.query.UserEmail}).sort({createdAt: -1 });
+        res.status(200).json(images);
+    } catch (error) {
+        console.error('Error getting images:', error);
+        res.status(500).send('Server error');
+    }
+});
 
 module.exports = app;
