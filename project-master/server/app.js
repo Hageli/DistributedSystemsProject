@@ -100,10 +100,11 @@ app.post('/login', async (req, res) => {
 
 // This is used to upload images to database
 app.post('/upload', upload.single('image'), (req, res) => {
+    const filename = req.file.filename;
     try {
         const newImage = new Image({
             sender: req.body.user,
-            image: file
+            image: filename
         })
         newImage.save();
     } catch {
