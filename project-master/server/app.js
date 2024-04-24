@@ -10,6 +10,20 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
 require("dotenv").config();
 
+// Multer setup for image upload
+const multer = require("multer");
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './public/images/');
+    },
+    filename: (req, file, cb) => {
+        const unique = Date.now();
+        cb(null, unique + "_" + file.originalname);
+    }
+})
+const upload = multer({ storage: storage })
+
+
 var app = express();
 
 app.use(logger('dev'));
@@ -18,6 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({origin: "http://localhost:3000", optionsSuccessStatus: 200}));
+
 
 // CONNECTING TO MONGODB
 const url = "mongodb://localhost:27017/project";
@@ -34,14 +49,13 @@ app.get('/user', async (req, res) => {
 
 app.post('/createaccount', async (req, res) => {
     const { email, name, password } = req.body;
-    const lowerEmail = email.toLowerCase();
-    const tempAccount = await User.findOne({email: lowerEmail});
+    const tempAccount = await User.findOne({email: email});
     // FAILED IF EMAIL IS ALREADY IN USE
     if(!tempAccount) {
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = new User({
-                email: lowerEmail,
+                email: email,
                 name: name,
                 password: hashedPassword
             });
@@ -52,7 +66,7 @@ app.post('/createaccount', async (req, res) => {
                 process.env.SECRET,
                 {expiresIn: 300,}
             );
-            res.status(201).json({token, userID: tempAccount._id.toString(), userEmail: lowerEmail})
+            res.status(201).json({token, userID: tempAccount._id.toString(), userEmail: email})
         } catch {
             res.send("Failed");
         }
@@ -81,6 +95,21 @@ app.post('/login', async (req, res) => {
             }
         })
     }
+})
+
+// This is used to upload images to database
+app.post('/upload', upload.single('image'), (req, res) => {
+    const imageName = req.file.filename;
+    try {
+        const newImage = new Image({
+            sender: req.body.user,
+            image: imageName
+        })
+        newImage.save();
+    } catch {
+        res.send("Failed");
+    }
+    res.send("Image uploaded");
 })
 
 module.exports = app;

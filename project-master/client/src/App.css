@@ -33,12 +33,12 @@ body {
 .edit-div,
 .login-div,
 .create-div,
-.ai-div {
+.ai-div,
+.filesend-div {
     background-color: #e3e6e5;
     padding: 10px;
     border-radius: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 10px
 }
 
 .img-div {
@@ -66,4 +66,9 @@ body {
 .footer-div a {
     margin-left: 5px;
     margin-right: 5px;
+}
+
+
+.file_upload {
+    margin: 10px
 }

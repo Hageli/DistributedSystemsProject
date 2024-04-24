@@ -30,7 +30,7 @@ function AddNewAccount({ setShowNewAccount }) {
             const success = response.status === 201;
             if(success) navigate('/mainpage')
         } catch (error) {
-            console.log("Axios failed");
+            alert("Email already in use")
         }
         window.location.reload();
     }

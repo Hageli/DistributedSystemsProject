@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import axios from 'axios'
-import { useCookies } from 'react-cookie'
+import { Cookies, useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -32,6 +32,26 @@ function Mainpage() {
       navigate('/home')
     }
 
+    // Uploads image to server
+    const uploadImage = async (e) => {
+      e.preventDefault();
+      let formData = new FormData();
+      const file = document.getElementById('file_upload').files[0]
+      setImage(URL.createObjectURL(file));
+      formData.append('image', file);
+      formData.append('user', cookies.UserEmail);
+
+      try {
+        axios.post('/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+      } catch (error) {
+        console.log("Axios failed");
+      }
+    }
+
     useEffect(() => {
       getUser();
     }, [])
@@ -50,6 +70,15 @@ function Mainpage() {
           <textarea style={{width: '40%', backgroundColor: '#fff', textAlign: 'center'}}></textarea>
         </div>
         <button type="submit" className="btn-small">Create Image</button>
+    </div>
+    <div className="filesend-div">
+        <p>Enter a file you want to upload</p>
+        <div className="file-container">
+          <form>
+            <input type="file" id="file_upload" name="file_upload" className="file_upload" accept="image/*"/>
+          </form>
+        </div>
+        <button type="submit" className="btn-small" onClick={uploadImage}>Upload Image</button>
     </div>
     <div className="footer-div">
       <a href="/home" onClick={Logout}>Logout</a>
