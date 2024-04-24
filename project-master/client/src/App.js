@@ -1,5 +1,6 @@
 import Home from "./components/Home";
 import Mainpage from "./components/Mainpage";
+import BrowseImages from "./components/BrowseImages";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import "./App.css"
 import { useCookies } from 'react-cookie'
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />}/>
         { authToken && <Route path="/mainpage" element={<Mainpage />}/>}
+        { authToken && <Route path="/browse" element={<BrowseImages />}/> }
       </Routes>
     </BrowserRouter>
   );
