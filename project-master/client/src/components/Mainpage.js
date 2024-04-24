@@ -3,7 +3,6 @@ import { useState } from 'react'
 import axios from 'axios'
 import { Cookies, useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
-import { Configuration, OpenAIApi } from 'openai'
 
 
 
@@ -12,6 +11,7 @@ function Mainpage() {
     const [ image, setImage] = useState('https://picsum.photos/id/237/200/300')
     const [ cookies, setCookie, removeCookie ] = useCookies(['user']);
     const [ text, setText ] = useState('');
+   
 
     let navigate = useNavigate();
 
@@ -30,15 +30,24 @@ function Mainpage() {
     
     //GENERATE AI IMAGE
     const AI_image = async () => {
-      console.log(REACT_APP_API_KEY)
       try  {
-
-
+        const response = await axios.get('/generate', {
+          params: {text}
+      })
+      setImage(response.data);
+      const saveResponse = await axios.post('/saveDogImage', {
+        url: response.data,
+        sender: cookies.UserEmail
+    });
+    if (saveResponse.status === 201) {
+      console.log('Image saved successfully');
+    } else {
+      console.error('Failed to save image');
+    }
       } catch (error) {
         console.log("Axios failed");
       }
     }
-
 
     // REMOVES COOKIES AKA LOGS USER OUT AND NAVIGATES BACK TO HOME PAGE
     const Logout = () => {

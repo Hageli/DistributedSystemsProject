@@ -56,7 +56,7 @@ function BrowseImages() {
                 )
             })}    
         </div>
-        <h1>DogAPI Images</h1>
+        <h1>API Images</h1>
         <div className="img-div">
             {dogimages == null ? "" : dogimages.map((image, index) => {
                 return (

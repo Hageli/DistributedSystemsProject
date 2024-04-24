@@ -9,6 +9,9 @@ const Image = require("./models/Image");
 const DogImage = require("./models/DogImage");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
+const OpenAI = require("openai");
+// YOUR KEY HERE
+const openai = new OpenAI({apiKey: ''});
 require("dotenv").config();
 
 // Multer setup for image upload
@@ -120,10 +123,8 @@ app.get('/images', async (req, res) => {
 })
 
 app.post('/saveDogImage', async (req, res) => {
-    try { 
-
+    try {
         const { url, sender } = req.body;
-
         const newImage = new DogImage({
             sender: sender,
             url: url
@@ -148,4 +149,14 @@ app.get('/dogimages', async (req, res) => {
     }
 });
 
+app.get('/generate', async (req, res) => {
+    const response =  await openai.images.generate({
+        model: "dall-e-3",
+        prompt: req.query.text,
+        n: 1,
+        size: '1024x1024'
+    });
+    res.send(response.data[0].url)
+
+})    
 module.exports = app;
