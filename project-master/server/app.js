@@ -14,7 +14,7 @@ require("dotenv").config();
 const multer = require("multer");
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './public/images/');
+        cb(null, '../client/src/images');
     },
     filename: (req, file, cb) => {
         const unique = Date.now();
@@ -110,6 +110,12 @@ app.post('/upload', upload.single('image'), (req, res) => {
         res.send("Failed");
     }
     res.send("Image uploaded");
+})
+
+// Find all user's imagenames from database
+app.get('/images', async (req, res) => {
+    const images = await Image.find({sender: req.query.UserEmail});
+    res.send(images);
 })
 
 module.exports = app;
