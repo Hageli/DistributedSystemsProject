@@ -23,14 +23,28 @@ function AddNewAccount({ setShowNewAccount }) {
     const submitForm = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/createaccount', {email, name, age, description, password});
+            console.log("created req for account creation")
+            const response = await axios.post('http://localhost:5000/createaccount', {email, name, age, description, password}, {withCredentials: true});
             setCookie("AuthToken", response.data.token);
             setCookie('UserEmail', response.data.userEmail);
             setCookie("UserID", response.data.userID);
             const success = response.status === 201;
             if(success) navigate('/mainpage')
         } catch (error) {
-            console.log("Axios failed");
+            console.error("Axios request failed:", error);
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.error("Data:", error.response.data);
+                console.error("Status:", error.response.status);
+                console.error("Headers:", error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error("Axios request was made but no response was received:", error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.error("Error setting up Axios request:", error.message);
+            }
         }
         window.location.reload();
     }
@@ -64,6 +78,26 @@ function AddNewAccount({ setShowNewAccount }) {
                         placeholder="name" 
                         required={true} 
                         onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+                <div className="create-input">
+                    <input 
+                        type="text" 
+                        id="age" 
+                        name="age" 
+                        placeholder="age" 
+                        required={true} 
+                        onChange={(e) => setAge(e.target.value)}
+                    />
+                </div>
+                <div className="create-input">
+                    <input 
+                        type="text" 
+                        id="description" 
+                        name="description" 
+                        placeholder="description" 
+                        required={true} 
+                        onChange={(e) => setDescription(e.target.value)}
                     />
                 </div>
                 <div className="create-input">
