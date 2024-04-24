@@ -3,12 +3,16 @@ import { useState } from 'react'
 import axios from 'axios'
 import { Cookies, useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
+import { Configuration, OpenAIApi } from 'openai'
+
 
 
 function Mainpage() {
     const [ user, setUser ] = useState('');
     const [ image, setImage] = useState('https://picsum.photos/id/237/200/300')
     const [ cookies, setCookie, removeCookie ] = useCookies(['user']);
+    const [ text, setText ] = useState('');
+
     let navigate = useNavigate();
 
     // GETS THE CURRENT LOGGED IN USER
@@ -24,6 +28,18 @@ function Mainpage() {
       } 
     }
     
+    //GENERATE AI IMAGE
+    const AI_image = async () => {
+      console.log(REACT_APP_API_KEY)
+      try  {
+
+
+      } catch (error) {
+        console.log("Axios failed");
+      }
+    }
+
+
     // REMOVES COOKIES AKA LOGS USER OUT AND NAVIGATES BACK TO HOME PAGE
     const Logout = () => {
       removeCookie('UserEmail');
@@ -59,7 +75,7 @@ function Mainpage() {
             setImage(fetchResponse.data.message);
 
             //SEND DOG IMAGE FOR SAVING
-            const saveResponse = await axios.post('http://localhost:5000/saveDogImage', {
+            const saveResponse = await axios.post('/saveDogImage', {
                 url: fetchResponse.data.message,
                 sender: cookies.UserEmail
             });
@@ -76,6 +92,10 @@ function Mainpage() {
       }
     };
 
+    const handleChange = (e) => {
+      setText(e.target.value);
+    }
+
     useEffect(() => {
       getUser();
     }, [])
@@ -91,9 +111,9 @@ function Mainpage() {
     <div className="ai-div">
         <p>Enter your prompt for AI image creation here</p>
         <div className="ai-container">
-          <textarea style={{width: '40%', backgroundColor: '#fff', textAlign: 'center'}}></textarea>
+          <textarea value={text} name="ai-text" onChange={handleChange} style={{width: '40%', backgroundColor: '#fff', textAlign: 'center'}}></textarea>
         </div>
-        <button type="submit" className="btn-small">Create Image</button>
+        <button type="submit" className="btn-small" onClick={AI_image}>Create Image</button>
     </div>
     <div className="filesend-div">
       <p>Enter a file you want to upload</p>
